@@ -14,6 +14,14 @@ public class HelloServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String nome = req.getParameter("nome");
+		String sobrenome = req.getParameter("sobrenome");
+		
+		resp.getWriter().print("Olá mundo " + nome + " " + sobrenome);
+	}
+	
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String nome = req.getParameter("nome");
 		String sobrenome = req.getParameter("sobrenome");
@@ -21,4 +29,13 @@ public class HelloServlet extends HttpServlet{
 		resp.getWriter().print("Olá mundo " + nome + " " + sobrenome);
 	}
 	
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.getWriter().print("Olá PUT");
+	}
+	
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.getWriter().print("Olá DELETE");
+	}
 }
