@@ -11,19 +11,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.livro.domain.Carro;
 import br.com.livro.domain.CarroService;
+import br.com.livro.domain.ListaCarros;
+import br.com.livro.util.JAXBUtil;
 
 @WebServlet("/carros/*")
-public class CarrosServlets extends HttpServlet{
+public class CarrosServlets extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private CarroService carroService = new CarroService();
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		List<Carro> carros = carroService.getCarros();
-		String carrosString = carros.toString();
-		resp.getWriter().write(carrosString);
+		ListaCarros lista = new ListaCarros();
+		lista.setCarros(carros);
+		// Gera o XML
+		String xml = JAXBUtil.toXML(lista);
+		ServletUtil.writeXML(resp, xml);
 	}
 
 }
