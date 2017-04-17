@@ -26,7 +26,7 @@ public class JAXBUtil {
 	static {
 		try {
 			// Informa ao JAXB que é para gerar XML destas classe
-			context = JAXBContext.newInstance(ListaCarros.class, Carro.class);
+			context = JAXBContext.newInstance(Response.class, ListaCarros.class, Carro.class);
 		} catch (JAXBException e) {
 			throw new RuntimeException();
 		}

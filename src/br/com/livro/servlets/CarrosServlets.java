@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import br.com.livro.domain.Carro;
 import br.com.livro.domain.CarroService;
 import br.com.livro.util.RegexUtil;
+import br.com.livro.util.Response;
 
 @WebServlet("/carros/*")
 public class CarrosServlets extends HttpServlet {
@@ -34,33 +35,37 @@ public class CarrosServlets extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(id != null){
+		if (id != null) {
 			// Informou o Id
 			Carro carro = carroService.getCarro(id);
-			if(carro != null){
+			if (carro != null) {
 				// Gera o JSON
-				/* O método setPrettyPrinting() é utilizado para exibir o JSON em um formato mais amigável com 
-				 * quebra de linhas. */
+				/*
+				 * O método setPrettyPrinting() é utilizado para exibir o JSON
+				 * em um formato mais amigável com quebra de linhas.
+				 */
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String json = gson.toJson(carro);
 				// Escreve o JSON na responde do servlet com application/json
 				ServletUtil.writeJSON(resp, json);
-			}else{
+			} else {
 				resp.sendError(404, "Carro não encontrado");
 			}
-		}else{
+		} else {
 			// Lista de carros
 			List<Carro> carros = carroService.getCarros();
 			// Gera o JSON
-			/* O método setPrettyPrinting() é utilizado para exibir o JSON em um formato mais amigável com 
-			 * quebra de linhas. */
+			/*
+			 * O método setPrettyPrinting() é utilizado para exibir o JSON em um
+			 * formato mais amigável com quebra de linhas.
+			 */
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			String json = gson.toJson(carros);
 			// Escreve o JSON na responde do servlet com application/json
 			ServletUtil.writeJSON(resp, json);
 		}
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// Cria o carro
@@ -72,16 +77,16 @@ public class CarrosServlets extends HttpServlet {
 		String json = gson.toJson(carro);
 		ServletUtil.writeJSON(resp, json);
 	}
-	
+
 	// Lê os parâmetros de request e cria o objeto Carro.
 	private Carro getCarroFromRequest(HttpServletRequest req) {
 		Carro carro = new Carro();
 		String id = req.getParameter("id");
-		if(id != null){
+		if (id != null) {
 			// Se informou o id, busca o objeto do banco de dados
 			carro = carroService.getCarro(Long.parseLong(id));
 		}
-		
+
 		carro.setNome(req.getParameter("nome"));
 		carro.setDesc(req.getParameter("descricao"));
 		carro.setUrlFoto(req.getParameter("url_foto"));
@@ -91,6 +96,28 @@ public class CarrosServlets extends HttpServlet {
 		carro.setTipo(req.getParameter("tipo"));
 
 		return carro;
+	}
+
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String requestUri = req.getRequestURI();
+		Long id = null;
+		try {
+			id = RegexUtil.matchId(requestUri);
+		} catch (SerialException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (id != null) {
+			carroService.delete(id);
+			Response r = Response.oK("Carro excluído com sucesso");
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String json = gson.toJson(r);
+			ServletUtil.writeJSON(resp, json);
+		} else {
+			// URL inválida
+			resp.sendError(404, "URL inválida");
+		}
 	}
 
 }
