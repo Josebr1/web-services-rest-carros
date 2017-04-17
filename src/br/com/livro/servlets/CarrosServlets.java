@@ -59,8 +59,38 @@ public class CarrosServlets extends HttpServlet {
 			// Escreve o JSON na responde do servlet com application/json
 			ServletUtil.writeJSON(resp, json);
 		}
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// Cria o carro
+		Carro carro = getCarroFromRequest(req);
+		// Salva o carro
+		carroService.save(carro);
+		// Escreve o JSON do novo carro salvo
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String json = gson.toJson(carro);
+		ServletUtil.writeJSON(resp, json);
+	}
+	
+	// Lê os parâmetros de request e cria o objeto Carro.
+	private Carro getCarroFromRequest(HttpServletRequest req) {
+		Carro carro = new Carro();
+		String id = req.getParameter("id");
+		if(id != null){
+			// Se informou o id, busca o objeto do banco de dados
+			carro = carroService.getCarro(Long.parseLong(id));
+		}
 		
-		
+		carro.setNome(req.getParameter("nome"));
+		carro.setDesc(req.getParameter("descricao"));
+		carro.setUrlFoto(req.getParameter("url_foto"));
+		carro.setUrlVideo(req.getParameter("url_video"));
+		carro.setLatitude(req.getParameter("latitude"));
+		carro.setLongitude(req.getParameter("longitude"));
+		carro.setTipo(req.getParameter("tipo"));
+
+		return carro;
 	}
 
 }
