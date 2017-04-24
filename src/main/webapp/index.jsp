@@ -1,5 +1,4 @@
 <pre>
-
 <a href="<%=request.getContextPath()%>/rest/hello">/rest/hello</a>
 
 <a href="<%=request.getContextPath()%>/rest/carros">/rest/carros</a>
