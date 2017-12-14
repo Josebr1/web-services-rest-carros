@@ -8,7 +8,7 @@ public class BaseDAO {
 
 	public BaseDAO(){
 		try{
-			// Necessário para utilizar o driver JDBC do Mysql
+			// Necessï¿½rio para utilizar o driver JDBC do Mysql
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			// Erro de driver JDBC (adicione o driver .jar do MySql em /WEB-INF/lib)
@@ -17,16 +17,16 @@ public class BaseDAO {
 	}
 	
 	protected Connection getConnection() throws SQLException{
-		// URL de conexão com o banco de dados
+		// URL de conexï¿½o com o banco de dados
 		String url = "jdbc:mysql://localhost/livro";
-		// Conecta utilizando a URL, usuário e senha
-		Connection conn = DriverManager.getConnection(url, "livro", "To35@nny85");
+		// Conecta utilizando a URL, usuï¿½rio e senha
+		Connection conn = DriverManager.getConnection(url, "livro", "livro123");
 		return conn;
 	}
 	
 	public static void main(String[] args) throws SQLException{
 		BaseDAO db = new BaseDAO();
-		// Testa a conexão 
+		// Testa a conexï¿½o 
 		Connection conn = db.getConnection();
 		System.out.println(conn);
 	}

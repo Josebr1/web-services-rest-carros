@@ -10,7 +10,14 @@ import junit.framework.TestCase;
 
 public class CarroTest extends TestCase {
 
-	private CarroService carroService = new CarroService();
+	private CarroService carroService;
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		// Cria o "bean" pelo Spring
+		carroService = (CarroService) SpringUtil.getInstance().getBean(CarroService.class);
+	}
 	
 	public void testListaCarros(){
 		List<Carro> carros = carroService.getCarros();
@@ -72,7 +79,7 @@ public class CarroTest extends TestCase {
 		// Busca o carro novamente
 		c = carroService.getCarro(id);
 		
-		// Desta vez o carro não existe mais
+		// Desta vez o carro nï¿½o existe mais
 		assertNull(c);
 		
 	}

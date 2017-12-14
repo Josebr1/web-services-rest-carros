@@ -4,9 +4,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class CarroService {
 
-	private CarroDAO db = new CarroDAO();
+	// Isso faz que o Spring instancie a classe CarroDAO.
+	@Autowired
+	private CarroDAO db;
 	
 	// Lista todos os carros do banco de dados
 	public List<Carro> getCarros(){
